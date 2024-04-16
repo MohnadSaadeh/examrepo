@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    <link rel="stylesheet" href="">
+</head>
+<body>
+    <h1 style="text-align: center; color: blue; margin-top: 50px;" >NETFIX</h1>
+    <div class="main" >
+        
+        
+
+        <div class="reg" >
+            
+            <h1>Registration</h1>
+            <div class="registration" >
+                <div class="form_names" >
+                    <p>First Name</p>
+                    <p>Last Name</p>
+                    <p>Email</p>
+                    <p>Password</p>
+                    <p>Confirm PW</p>
+                </div>
+                <div class="reg" >
+                    <form class="formes" action="/register" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="log_reg" value="register">
+                        <input type="text" name="firstname">
+                        <input type="text" name="lastname" >
+                        <input type="text" name="email" >
+                        <input type="password" name="password" >
+                        <input type="password" name="Confirm_PW" >
+
+                        <input type="submit" value="Register">
+                    </form>
+                </div>
+            </div>
+
+                {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+                {% endif %}
+        </div>
+
+        <div class="log" >
+            <h1>Login</h1>
+            <div class="login" >
+                <div class="form_names" >
+                    <p>Email</p>
+                    <p>Password</p>
+                </div>
+                <div class="reg" >
+                    <form class="formes" action="/log_in" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="log_reg" value="login">
+                        <input type="text" name="email" >
+                        <input type="password" name="password" >
+                        
+                        <input type="submit" value="Login">
+                    </form>
+                </div>
+            </div>
+            {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags%} class="{{ message.tags }}"{% endif %}>{{ message}}</li>    
+                    {% endfor %}
+                </ul>
+                {% endif %}
+        </div>
+
+        
+
+
+
+
+    </div>
+</body>
+</html>

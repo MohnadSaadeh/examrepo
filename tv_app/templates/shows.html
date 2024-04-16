@@ -1,0 +1,63 @@
+
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+    <title>TV Shows</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> 
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="/docs/5.3/assets/js/color-modes.js"></script>
+
+</head>
+
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
+
+<main class="form-signin w-100 m-auto">
+    <h2> Welcome To your NEXTFIX ,{{user.first_name}} </h2> <h5 style="text-align:right;"><a class="link" href="new">+ Create</a> <a class="link" href="/logout"> Logout </a></h5> 
+        <div class="form_container" >
+            <div class="theform">
+                <h2>All TV Shows</h2>
+                <table class="table table-striped table-Active">
+                    <thead>
+                        <tr>
+                            
+                            <th scope="col">Title</th>
+                            <th scope="col">Network</th>
+                            <th scope="col">Relese Date</th>
+                            <th scope="col">More</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for show in all_shows %}
+                        <tr>
+                            
+                            <td>{{show.title}}</td>
+                            <td>{{show.network}}</td>
+                            <td>{{ show.release_date}} </td>
+                            <td><a href="/shows/{{show.id}}">Details</a> <a href="/edit_a_show/{{show.id}}">Edit</a> <a href="/delete_a_show/{{show.id}}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+            </div>   
+        </div>
+        <hr>
+        
+
+    <!-- <h3 class="h3 mb-3 fw-normal "> <a href="authors_page">Add a New Show</a></h3> -->
+
+
+
+</main>
+<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+</html>

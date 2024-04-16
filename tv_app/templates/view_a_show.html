@@ -1,0 +1,80 @@
+
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+    <title>TV Show</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> 
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="/docs/5.3/assets/js/color-modes.js"></script>
+
+</head>
+
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
+<main class="form-signin w-100 m-auto">
+    <h5 style="text-align:right;"> <a class="link" href="/shows">TV Shows</a> <a class="link" href="/logout"> Logout </a></h5> 
+        <div class="form_container" >
+            <div class="theform" >
+                <table>
+                    <thead>
+                        <tr >
+                            <th scope="col">{{a_show.title}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="a_chosen_show"> <h6> Recomminded by : </h6></td> <td><p> {{ a_show.title}} </p></td>
+                        </tr>
+                        <tr>
+                            <td class="a_chosen_show"><h6> Network : </h6></td> <td><p>  {{a_show.network}} </p></td>
+                        </tr>
+                        <tr>
+                            <td class="a_chosen_show" ><h6> Release Date : </h6> </td><td><p> {{a_show.release_date}} </p></td> 
+                        </tr>
+                        <tr>
+                            <td class="a_chosen_show"><h6> Comments : </h6></td> <td>
+                                {% for comment in all_comments %}
+                                <li class="list_of_ninja">
+                                    {{comment.content }}
+                                </li>
+                                {% endfor %}</td> 
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>   
+        </div>
+        <hr>
+        <p>Last Updated : {{a_show.updated_at}} </p>
+        <a href="/edit_a_show/{{a_show.id}}">Edit</a> <a href="#"> delete</a>
+        <hr>
+    <!-- <h3 class="h3 mb-3 fw-normal "> <a href="authors_page">Add a New Show</a></h3> -->
+    <div>
+        <form action="/post_a_comment/{{a_show.id}}" method="post">
+            {% csrf_token %}
+            Poast a Comment : <textarea name="comment" class="form-control" cols="40" rows="4"></textarea>
+            
+            <button type="submit">Post</button>
+        </form>
+    </div>
+
+    <div>
+        {% for comment in all_comments %}
+        <li style="color: blueviolet;">
+            {{comment.content }}
+        </li>
+        {% endfor %}
+    </div>
+
+
+
+</main>
+<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+</html>
