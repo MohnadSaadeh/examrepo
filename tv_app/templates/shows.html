@@ -39,10 +39,10 @@
                         {% for show in all_shows %}
                         <tr>
                             
-                            <td>{{show.title}}</td>
+                            <td><a href="/shows/{{show.id}}">{{show.title}}</a></td>
                             <td>{{show.network}}</td>
                             <td>{{ show.release_date}} </td>
-                            <td><a href="/shows/{{show.id}}">Details</a> <a href="/edit_a_show/{{show.id}}">Edit</a> <a href="/delete_a_show/{{show.id}}">Delete</a></td>
+                            <td> <a href="/edit_a_show/{{show.id}}">Edit</a> <a href="/delete_a_show/{{show.id}}">Delete</a></td>
                         </tr>
                         {% endfor %}
                         

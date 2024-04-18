@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="a_chosen_show"> <h6> Recomminded by : </h6></td> <td><p> {{ a_show.title}} </p></td>
+                            <td class="a_chosen_show"> <h6> Recomminded by  </h6></td> <td><p style="font-weight: bold;"> : {{ a_show.the_user.first_name}} {{ a_show.the_user.last_name}}</p></td>
                         </tr>
                         <tr>
                             <td class="a_chosen_show"><h6> Network : </h6></td> <td><p>  {{a_show.network}} </p></td>
@@ -39,15 +39,15 @@
                             <td class="a_chosen_show" ><h6> Release Date : </h6> </td><td><p> {{a_show.release_date}} </p></td> 
                         </tr>
                         <tr>
-                            <td class="a_chosen_show"><h6> Comments : </h6></td> <td>
-                                {% for comment in all_comments %}
-                                <li class="list_of_ninja">
-                                    {{comment.content }}
-                                </li>
-                                {% endfor %}</td> 
+                            <td class="a_chosen_show" ><h6>{{ a_show.the_user.first_name}}'s Comments : </h6> </td> 
                         </tr>
+                        
+                        
                     </tbody>
                     </table>
+                    <tr >
+                        <td class="a_chosen_show" >  <p style="font-style: italic;"> {{a_show.comment}} </p> </td> 
+                    </tr>
             </div>   
         </div>
         <hr>
@@ -58,18 +58,23 @@
     <div>
         <form action="/post_a_comment/{{a_show.id}}" method="post">
             {% csrf_token %}
-            Poast a Comment : <textarea name="comment" class="form-control" cols="40" rows="4"></textarea>
+            Poast a Comment : <textarea name="comment" class="form-control" cols="30" rows="2"></textarea>
             
             <button type="submit">Post</button>
         </form>
     </div>
 
     <div>
-        {% for comment in all_comments %}
-        <li style="color: blueviolet;">
-            {{comment.content }}
-        </li>
-        {% endfor %}
+        <ul>
+        {% for show_comment in all_comments %}
+            {% if user.id == show_comment.user_id %}
+                <li> <p> <span style="color: black;">{{show_comment.user.first_name}} :</span> {{show_comment.content}}<a href="/delete_a_comment/{{show_comment.id}}/{{a_show.id}}">Delete</a></p></li>
+            {% else  %}
+                <li><p><span style="color: black;">{{show_comment.user.first_name}} :</span> {{show_comment.content}}</p></li>
+            {% endif %}
+        {% endfor %} 
+        </ul>
+        
     </div>
 
 

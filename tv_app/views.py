@@ -60,16 +60,6 @@ def tv_shows(request):
 
 
 
-# def shows(request):
-#     all__the_shows = models.all_shows()
-#     context = {
-#         "all_shows" : all__the_shows
-#     }
-#     return render(request, 'shows.html' , context)
-
-# def tv_shows(request):
-#     return redirect('/shows')
-
 def add_show_page(request):
     return render(request, 'add_show.html')
 
@@ -85,17 +75,20 @@ def get_show(request):
         show_network = request.POST['network']
         show_release_date = request.POST['release_date']
         show_comment = request.POST['comment']
-        models.create_a_show(show_title, show_network, show_release_date , show_comment)
+        user = request.session['user_id']
+        models.create_a_show(show_title, show_network, show_release_date , show_comment , user)
         return redirect('/new')
 
 def view_a_show(request, id):
     if 'user_id' not in request.session:  # if user is not logged in (not in the session)
         return redirect('/')
     the_show = models.view_a_show(id)
-    the_comments = models.view_a_show(id).comments.all()
+    the_comments = models.Comment.objects.all()
+    user = models.User.objects.get(id=request.session['user_id'])
     context = {
         "a_show" : the_show ,
-        "all_comments" : the_comments
+        "all_comments" : the_comments ,
+        "user" : user
     }
     return render(request, 'view_a_show.html', context)
 
@@ -125,12 +118,16 @@ def update_a_show(request, id):
 
 
 def post_a_comment(request ,id):
-    show = models.view_a_show(id = id )
+    show = id
+    user = request.session['user_id']
     the_comment = request.POST['comment']
-    models.create_a_comment(the_comment, show )
+    models.create_a_comment(the_comment, show  , user )
     return redirect(f'/shows/{id}')
-    
 
+def delete_a_comment(request, id ,show_id): #show_id is to return to the same show page
+    models.delete_a_comment(id)
+    return redirect(f'/shows/{show_id}') #show_id is to return to the same show page from view_a_show.html
+    
 
 def delete_a_show(request, id):
     models.delete_a_show(id)

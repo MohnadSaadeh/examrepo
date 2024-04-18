@@ -35,6 +35,7 @@ class User(models.Model):
     conferm_password = models.CharField(max_length=45)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # shows : all the shows of the user 
     objects = UserManager()
 
 
@@ -62,6 +63,7 @@ class Show(models.Model):
     network = models.CharField(max_length= 45)
     release_date = models.DateField()
     comment = models.TextField(max_length= 255)
+    the_user = models.ForeignKey(User, related_name="shows", on_delete=models.CASCADE) # user can add many shows
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # comments : all the comments of the show
@@ -71,15 +73,19 @@ class Show(models.Model):
 class Comment(models.Model):
     content = models.TextField(max_length= 255)
     show = models.ForeignKey(Show, related_name="comments", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-def create_a_comment(the_comment, show):
-    return Comment.objects.create(content=the_comment, show=show)
+def create_a_comment(the_comment, show ,user):
+    show = Show.objects.get(id = show )
+    user = User.objects.get(id = user)
+    return Comment.objects.create(content=the_comment, show=show , user = user)
 
 
-def create_a_show(show_title, show_network, show_release_date , show_comment ):
-    return Show.objects.create(title=show_title , network=show_network , release_date=show_release_date , comment=show_comment )
+def create_a_show(show_title, show_network, show_release_date , show_comment , user):
+    user_show = User.objects.get(id = user)
+    return Show.objects.create(title=show_title , network=show_network , release_date=show_release_date , comment=show_comment , the_user = user_show )
 
 def all_shows():
     return Show.objects.all()
@@ -100,6 +106,10 @@ def update_a_show(id, show_title, show_network, show_release_date, show_comment)
 def delete_a_show(id):
     show = Show.objects.get(id = id)
     return show.delete()
+
+def delete_a_comment(id): 
+    comment = Comment.objects.get(id = id)
+    return comment.delete()
 
 
 
