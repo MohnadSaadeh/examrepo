@@ -25,7 +25,7 @@
                 <table>
                     <thead>
                         <tr >
-                            <th scope="col">{{a_show.title}}</th>
+                            <th scope="col"> <h2>{{a_show.title}}</h2> </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,31 +50,36 @@
                     </tr>
             </div>   
         </div>
+        
+        
         <hr>
-        <p>Last Updated : {{a_show.updated_at}} </p>
-        <a href="/edit_a_show/{{a_show.id}}">Edit</a> <a href="#"> delete</a>
-        <hr>
-    <!-- <h3 class="h3 mb-3 fw-normal "> <a href="authors_page">Add a New Show</a></h3> -->
     <div>
         <form action="/post_a_comment/{{a_show.id}}" method="post">
             {% csrf_token %}
-            Poast a Comment : <textarea name="comment" class="form-control" cols="30" rows="2"></textarea>
-            
-            <button type="submit">Post</button>
+            Poast a Comment : <textarea name="comment" class="form-control" cols="20" rows="2"></textarea>
+            {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags%} class="{{ message.tags }}"{% endif %}>{{ message}}</li>    
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <button class="btn btn-primary w-25 py-2"  type="submit">Post</button>
         </form>
     </div>
 
     <div>
         <ul>
         {% for show_comment in all_comments %}
-            {% if user.id == show_comment.user_id %}
-                <li> <p> <span style="color: black;">{{show_comment.user.first_name}} :</span> {{show_comment.content}}<a href="/delete_a_comment/{{show_comment.id}}/{{a_show.id}}">Delete</a></p></li>
+            {% if user.id == show_comment.the_user_id %}
+                <li class="comment">
+                    <span style="color: rgb(85, 85, 85);"> {{show_comment.the_user.first_name}} ,<span style="font-size: x-small;" >at : {{show_comment.created_at}}</span>  <p> {{show_comment.content}} <a href="/delete_a_comment/{{show_comment.id}}/{{a_show.id}}">Delete</a></p>
+                </li class="comment">
             {% else  %}
-                <li><p><span style="color: black;">{{show_comment.user.first_name}} :</span> {{show_comment.content}}</p></li>
+                <li class="comment"><span style="color: rgb(85, 85, 85);">{{show_comment.the_user.first_name}} , <span style="font-size: x-small;" >at : {{show_comment.created_at}}</span><p> {{show_comment.content}}</p></li>
             {% endif %}
         {% endfor %} 
         </ul>
-        
     </div>
 
 

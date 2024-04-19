@@ -5,7 +5,6 @@ class UserManager(models.Manager):
     def basic_validator(self, postData):
         errors = {}
         errorslogin = {}
-        #DATE_REGEX = re.compile(r'^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$')
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') # using regex to validate email
         # add keys and values to errors dictionary for each invalid field
         if postData['log_reg'] == 'register':
@@ -46,8 +45,6 @@ class ShowManager(models.Manager):
         # add keys and values to errors dictionary for each invalid field
         if len(postData['title']) < 3  :
             errors["title"] = "title should be at least 3 characters"
-        # if ( postData['title']  == Show.objects.filter(title = postData['title'])):
-        #     errors["title"] = "title should be unique"
         if Show.objects.filter(title=postData['title']).exists():
             errors["title"] = "Title should be unique"
         if len(postData['network']) < 3:
@@ -69,18 +66,25 @@ class Show(models.Model):
     # comments : all the comments of the show
     objects = ShowManager()
 
+class CommentManager(models.Manager):
+    def basic_validator(self, postData):
+        errors = {}
+        if len(postData['comment']) < 2: # shuld be at least 10 characters
+            errors["comment"] = "a comment should be at least 2 characters"
+        return errors
 
 class Comment(models.Model):
     content = models.TextField(max_length= 255)
     show = models.ForeignKey(Show, related_name="comments", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
+    the_user = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = CommentManager()
 
 def create_a_comment(the_comment, show ,user):
     show = Show.objects.get(id = show )
     user = User.objects.get(id = user)
-    return Comment.objects.create(content=the_comment, show=show , user = user)
+    return Comment.objects.create(content=the_comment, show=show , the_user = user)
 
 
 def create_a_show(show_title, show_network, show_release_date , show_comment , user):

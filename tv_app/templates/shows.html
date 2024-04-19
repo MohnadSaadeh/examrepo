@@ -42,7 +42,13 @@
                             <td><a href="/shows/{{show.id}}">{{show.title}}</a></td>
                             <td>{{show.network}}</td>
                             <td>{{ show.release_date}} </td>
-                            <td> <a href="/edit_a_show/{{show.id}}">Edit</a> <a href="/delete_a_show/{{show.id}}">Delete</a></td>
+                            <td> 
+                                {% if user.id == show.the_user_id %}
+                                <a href="/edit_a_show/{{show.id}}">Edit</a> <a href="/delete_a_show/{{show.id}}">Delete</a>
+                                {%else%}
+                                <a href="/shows/{{show.id}}">Details</a>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                         

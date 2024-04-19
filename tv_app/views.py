@@ -103,7 +103,7 @@ def edit_a_show(request, id):
 
 def update_a_show(request, id):
     errors = models.Show.objects.basic_validator(request.POST)
-    if len(errors) > 0:
+    if len(errors) > 0  :
         for key, value in errors.items():
             messages.error(request, value)
         # redirect the user back to the form to fix the errors
@@ -118,11 +118,18 @@ def update_a_show(request, id):
 
 
 def post_a_comment(request ,id):
-    show = id
-    user = request.session['user_id']
-    the_comment = request.POST['comment']
-    models.create_a_comment(the_comment, show  , user )
-    return redirect(f'/shows/{id}')
+    errors = models.Comment.objects.basic_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        # redirect the user back to the form to fix the errors
+        return redirect(f'/shows/{id}' )
+    else:
+        show = id
+        user = request.session['user_id']
+        the_comment = request.POST['comment']
+        models.create_a_comment(the_comment, show  , user )
+        return redirect(f'/shows/{id}')
 
 def delete_a_comment(request, id ,show_id): #show_id is to return to the same show page
     models.delete_a_comment(id)
